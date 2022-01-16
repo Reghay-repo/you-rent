@@ -5,8 +5,9 @@ const { Schema }    = mongoose
 const bookingSchema = Schema({
     title: String,
     description: String,
-    price: String,
-    location:String
+    price: Number,
+    location:String,
+    image:String
 })
 
 
