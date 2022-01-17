@@ -7,6 +7,10 @@ const Booking       =require('./models/booking')
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const { redirect } = require('express/lib/response')
+const ExpressError = require('./utils/ExpressError')
+const wrapAsync     =require('./utils/wrapAsync')
+const joi = require('joi')
+const {bookingValidationSchema} = require('./validations/schemaValidations')
 
 
 // set ejs as view engine
@@ -24,7 +28,16 @@ async function main() {
   console.log('connected to mongodb !')
 }
 
-// crud(create,read,update,delete)
+const validatedBooking = (req, res, next) => {
+    const {error} = bookingValidationSchema.validate(req.body)
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg,400)
+    } else {
+        next()
+    }
+}
+
 
 //  read all data  
 app.get('/bookings', async (req,res) => {
@@ -39,37 +52,40 @@ app.get('/bookings/create', (req,res) => {
 })
 
 // store data
-app.post('/bookings', async (req,res) => {
+app.post('/bookings',validatedBooking, wrapAsync(async (req,res,next) => {
     const { title,price,description,location} = req.body
     const newBooking = {title,price,location,description}
     const booking = new Booking(newBooking)
     await booking.save()
     res.redirect(`/bookings/${booking._id}`)
-})
+ 
+}))
 
 
 // view booking
-app.get('/bookings/:id', async (req,res) => {
+app.get('/bookings/:id', wrapAsync(async (req,res) => {
     const { id } = req.params
     const booking = await  Booking.findById(id)
     res.render('bookings/show', { booking })
-})
+}))
 
 // delete booking
 app.delete('/bookings/:id',  async (req,res) => {
     const { id } = req.params
-    const deletBooking = await Booking.findByIdAndRemove(id)
+    const deletBooking = await Booking.findByIdAndDelete(id)
     res.redirect('/bookings')
 })
 
 // update booking
-app.get('/bookings/:id/edit', async(req,res) => {
+app.get('/bookings/:id/edit',wrapAsync( async(req,res) => {
     const {id} = req.params
     const booking = await Booking.findById(id)
     res.render('bookings/edit', {booking})
 })
+
+)
 // store update
-app.put('/bookings/:id',  async (req, res) => {
+app.put('/bookings/:id', validatedBooking,  async (req, res) => {
     const {id} = req.params
     const updateBooking = await Booking.findByIdAndUpdate(id, req.body, {runValidators:true})
     res.redirect(`/bookings/${updateBooking._id}`)
@@ -84,6 +100,15 @@ app.get('/', (req,res) => {
     res.render('home')
 })
 
+app.all('*', (req, res,next) => {
+    next(new ExpressError('Page not found', 404))
+})
+
+app.use((err, req ,res, next) => {
+    const {status = 500} = err
+    if(! err.message) err.message = 'something went wrong!'
+     res.status(status).render('error', {err,status})
+})
 
 // setup server on port 3000
 app.listen(port, () => {

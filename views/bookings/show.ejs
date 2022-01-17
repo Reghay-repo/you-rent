@@ -16,7 +16,7 @@
             </div>
             <div class="card-body">
                 <a href="/bookings/<%= booking._id %>/edit" class="btn card-link btn-info">Edit</a>
-               <form class="d-inline" action="/bookings/<%= booking._id %>?_method=DELETE">
+               <form class="d-inline" action="/bookings/<%= booking._id %>?_method=DELETE" method="post">
                     <button class="btn card-link btn-danger"> Delete</button>   
                 </form>
               </div>

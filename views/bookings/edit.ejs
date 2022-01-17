@@ -4,27 +4,27 @@
     <h1 class="text-center">Edit Booking</h1>
     <div class="col-6 offset-3">
         
-    <form action="/bookings/<%= booking._id %>?_method=PUT" method="post">
+    <form action="/bookings/<%= booking._id %>?_method=PUT" method="post"  novalidate class="validated-form">
         <div class="mb-3">
             <label  class="form-label" for="title">Title</label>
-            <input class="form-control" type="text" placeholder="title" name="title" value="<%= booking.title%>" id="title">
+            <input class="form-control" type="text" placeholder="title" name="title" value="<%= booking.title%>" id="title" required>
         </div>
         <div class="mb-3">
             <label class="form-label" for="description">Description</label>
             <br>
-            <textarea name="description" class="form-control  placeholder="Write your description here." id="description" cols="30" rows="10"><%= booking.description%>"</textarea>
+            <textarea name="description" class="form-control  placeholder="Write your description here." id="description" cols="30" rows="10" required><%= booking.description%>"</textarea>
         </div>
         <div class="input-group mb-3">
             <span class="input-group-text" id="basic-addon1">MAD</span>
-            <input type="text" class="form-control" placeholder="Price" aria-label="Username" value="<%= booking.price%>" aria-describedby="basic-addon1">
+            <input type="number" class="form-control" placeholder="Price" aria-label="price" name="price" value="<%= booking.price%>" aria-describedby="basic-addon1"  required>
           </div>
         <div class="mb-3">
             <label class="form-label" for="location">Location</label>
-            <input class="form-control" type="text" placeholder="ex: Morocco, tangier" name="location" value="<%= booking.location%>" id="location">
+            <input class="form-control" type="text" placeholder="ex: Morocco, tangier" name="location" value="<%= booking.location%>" id="location" required>
         </div>
         <div class="mb-3">
             <label class="form-label" for="image">Image</label>
-            <input class="form-control" type="text" placeholder="ex: www.image.com/link" value="<%= booking.image%>" name="image" id="image">
+            <input class="form-control" type="text" placeholder="ex: www.image.com/link" value="<%= booking.image%>" name="image" id="image" required>
         </div>
         <div>
             <button class="btn btn-success">Update</button>
@@ -32,3 +32,31 @@
     </form>
     </div>
 </div>
+
+
+
+
+
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+   (function () {
+     'use strict'
+   
+     // Fetch all the forms we want to apply custom Bootstrap validation styles to
+     var forms = document.querySelectorAll('.validated-form')
+   
+     // Loop over them and prevent submission
+     Array.prototype.slice.call(forms)
+       .forEach(function (form) {
+         form.addEventListener('submit', function (event) {
+           if (!form.checkValidity()) {
+             event.preventDefault()
+             event.stopPropagation()
+           }
+   
+           form.classList.add('was-validated')
+         }, false)
+       })
+   })()
+   </script>
