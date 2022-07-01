@@ -25,7 +25,10 @@ app.use(express.static('public'));
 
 // app.use('/static', express.static(path.join(__dirname, 'public')))
 //use static files
-// app.use(express.static(path.join(__dirname, 'public'))); //  "public" off of current is root
+
+
+
+// app.use("views", express.static(path.join(__dirname, "public"))); //  "public" off of current is root
 
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))

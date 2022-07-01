@@ -1,77 +1,74 @@
 <% layout('layouts/boilerplate') -%>
-
+<%- include('../partials/create-header') %> 
 <div class="row">
-    <h1 class="text-center">Create new Booking</h1>
-    <div class="col-6 offset-3">
-        
-    <form action="/bookings" method="post" class="validated-form" novalidate>
-        <div class="mb-3">
-            <label  class="form-label" for="title">Title</label>
-            <input class="form-control" type="text" placeholder="title" name="title" id="title" required>
-            <div class="valid-feedback">
-                Looks good!
-              </div>
-              
-        </div>
-        <div class="input-group mb-3">
-            <span class="input-group-text" id="price">MAD</span>
-            <input type="text" class="form-control" name="price" placeholder="Price" aria-label="price" aria-describedby="price" required>
-            <div class="valid-feedback">
-                Looks good!
-              </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="location">Location</label>
-            <input class="form-control" type="text" placeholder="ex: Morocco, tangier" name="location" id="location" required>
-            <div class="valid-feedback">
-                Looks good!
-              </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="image">Image</label>
-            <input class="form-control" type="text" placeholder="ex: www.image.com/link" name="image" id="image" required>
-            <div class="valid-feedback">
-                Looks good!
-              </div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label" for="description">Description</label>
-            <br>
-            <textarea name="description" class="form-control" placeholder="Write your description here." id="description" cols="30" rows="10" required></textarea>
-            <div class="valid-feedback">
-                Looks good!
-              </div>
-        </div>
-        <div>
-            <button class="btn btn-success">Create</button>
-        </div>
-    </form>
-    </div>
+  <h1 class="text-center">Create new Booking</h1>
+  <div class="col-6 offset-3">
+      
+  <form action="/bookings" method="post" class="validated-form" novalidate>
+      <div class="mb-3">
+          <label  class="form-label" for="title">Title</label>
+          <input class="form-control" type="text" placeholder="title" name="title" id="title" required>
+          <div class="valid-feedback">
+              Looks good!
+            </div>
+            
+      </div>
+      <div class="input-group mb-3">
+          <span class="input-group-text" id="price">MAD</span>
+          <input type="text" class="form-control" name="price" placeholder="Price" aria-label="price" aria-describedby="price" required>
+          <div class="valid-feedback">
+              Looks good!
+            </div>
+      </div>
+      <div class="mb-3">
+          <label class="form-label" for="location">Location</label>
+          <input class="form-control" type="text" placeholder="ex: Morocco, tangier" name="location" id="location" required>
+          <div class="valid-feedback">
+              Looks good!
+            </div>
+      </div>
+      <div class="mb-3">
+          <label class="form-label" for="image">Image</label>
+          <input class="form-control" type="text" placeholder="ex: www.image.com/link" name="image" id="image" required>
+          <div class="valid-feedback">
+              Looks good!
+            </div>
+      </div>
+      <div class="mb-3">
+          <label class="form-label" for="description">Description</label>
+          <br>
+          <textarea name="description" class="form-control" placeholder="Write your description here." id="description" cols="30" rows="10" required></textarea>
+          <div class="valid-feedback">
+              Looks good!
+            </div>
+      </div>
+      <div>
+          <button class="btn btn-success">Create</button>
+      </div>
+  </form>
+  </div>
 </div>
 
-
-
-
-
+  
 <script>
- // Example starter JavaScript for disabling form submissions if there are invalid fields
+// Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
-  'use strict'
+'use strict'
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.validated-form')
+// Fetch all the forms we want to apply custom Bootstrap validation styles to
+var forms = document.querySelectorAll('.validated-form')
 
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
+// Loop over them and prevent submission
+Array.prototype.slice.call(forms)
+  .forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
 
-        form.classList.add('was-validated')
-      }, false)
-    })
+      form.classList.add('was-validated')
+    }, false)
+  })
 })()
 </script>
