@@ -13,10 +13,19 @@ const joi = require('joi')
 const {bookingValidationSchema} = require('./validations/schemaValidations')
 
 
+
+
+
+
 // set ejs as view engine
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.engine('ejs',ejsMate )
+app.use(express.static('public'));
+
+// app.use('/static', express.static(path.join(__dirname, 'public')))
+//use static files
+// app.use(express.static(path.join(__dirname, 'public'))); //  "public" off of current is root
 
 app.use(express.urlencoded({extended:true}))
 app.use(methodOverride('_method'))
@@ -41,7 +50,7 @@ const validatedBooking = (req, res, next) => {
 
 //  read all data  
 app.get('/bookings', async (req,res) => {
-    const bookings = await Booking.find({})
+    const bookings = await Booking.find({}).limit(30)
     res.render('bookings/index', { bookings })      
 })
 
@@ -100,6 +109,20 @@ app.get('/', (req,res) => {
     res.render('home')
 })
 
+// auth routes
+app.get('/login', (req,res) => {
+    res.render('auth/login')
+})
+
+app.get('/register', (req,res) => {
+    res.render('auth/register')
+})
+
+
+app.get('/about', (req,res) => {
+    res.render('about')
+})
+
 app.all('*', (req, res,next) => {
     next(new ExpressError('Page not found', 404))
 })
@@ -109,6 +132,7 @@ app.use((err, req ,res, next) => {
     if(! err.message) err.message = 'something went wrong!'
      res.status(status).render('error', {err,status})
 })
+
 
 // setup server on port 3000
 app.listen(port, () => {
