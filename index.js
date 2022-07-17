@@ -3,14 +3,15 @@ const mongoose      = require('mongoose')
 const path          = require('path')
 const port          = 3000
 const app           = express()
-const Booking       =require('./models/booking')
+const Booking       = require('./models/booking')
+const Review        = require('./models/review')
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const { redirect } = require('express/lib/response')
 const ExpressError = require('./utils/ExpressError')
 const wrapAsync     =require('./utils/wrapAsync')
 const joi = require('joi')
-const {bookingValidationSchema} = require('./validations/schemaValidations')
+const {bookingValidationSchema,reviewValidationSchema} = require('./validations/schemaValidations')
 
 
 
@@ -50,6 +51,16 @@ const validatedBooking = (req, res, next) => {
     }
 }
 
+const validateReview = (req,res,next) => {
+    const {error} = reviewValidationSchema.validate(req.body)
+    if(error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg,400)
+    } else {
+        next()
+    }
+}
+
 
 //  read all data  
 app.get('/bookings', async (req,res) => {
@@ -77,7 +88,7 @@ app.post('/bookings',validatedBooking, wrapAsync(async (req,res,next) => {
 // view booking
 app.get('/bookings/:id', wrapAsync(async (req,res) => {
     const { id } = req.params
-    const booking = await  Booking.findById(id)
+    const booking = await  Booking.findById(id).populate('reviews')
     res.render('bookings/show', { booking })
 }))
 
@@ -103,8 +114,23 @@ app.put('/bookings/:id', validatedBooking,  async (req, res) => {
     res.redirect(`/bookings/${updateBooking._id}`)
 })
 
+// create a review
+app.post('/bookings/:id/reviews',validateReview, wrapAsync(async(req,res) => {
+    const booking = await Booking.findById(req.params.id);
+    const review = new Review(req.body);
+    booking.reviews.push(review);
+    await booking.save();
+    await review.save();
+    return res.redirect(`/bookings/${booking._id}`);
+}));
 
-
+// delete review
+app.delete('/bookings/:id/reviews/:reviewId', wrapAsync(async (req,res) => {
+    const {id, reviewId} = req.params
+    await Booking.findByIdAndUpdate(id,{$pull: {reviews: reviewId}})
+    await Review.findByIdAndDelete(reviewId)
+    res.redirect(`/bookings/${id}`);
+}))
 
 
 // route to home

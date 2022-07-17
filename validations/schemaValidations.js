@@ -10,3 +10,10 @@ module.exports.bookingValidationSchema = joi.object({
     
 }).required()
 
+
+
+module.exports.reviewValidationSchema = joi.object({
+    body: joi.string().required(),
+    rating: joi.number().required().min(1).max(5),
+
+}).required()

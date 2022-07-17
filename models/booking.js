@@ -1,5 +1,6 @@
 const mongoose      = require('mongoose')
 const { Schema }    = mongoose
+const Review        = require('./review')
 
 // createing schema for a booking
 const bookingSchema = Schema({
@@ -7,9 +8,25 @@ const bookingSchema = Schema({
     description: String,
     price:Number,
     location:String,
-    image:String
+    image:String,
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Review'
+        }
+    ]
 })
 
+
+bookingSchema.post('findOneAndDelete', async (doc) => {
+    if(doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
+    }
+})
 
 
 // creating model from our schema
