@@ -13,7 +13,9 @@ const wrapAsync     =require('./utils/wrapAsync')
 const joi = require('joi')
 const {bookingValidationSchema,reviewValidationSchema} = require('./validations/schemaValidations')
 const bookingsRoutes = require('./routes/bookings')
-const reviewsRoutes  = require('./routes/reviews')
+const reviewsRoutes  = require('./routes/reviews');
+const session        = require('express-session');
+
 // set ejs as view engine
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -23,6 +25,19 @@ app.use(express.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use('/bookings', bookingsRoutes);
 app.use('/bookings/:id/reviews', reviewsRoutes);
+
+const sessionConfig =  {
+    secret:'thisisadamnsecret',
+    resave:false,
+    saveUninitialized:true,
+    cookie: {
+        httpOnly:true,
+        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+    }
+}
+app.use(session(sessionConfig))
+
 // connection to mongodb through mongoose
 main().catch(err => console.log(err));
 async function main() {
