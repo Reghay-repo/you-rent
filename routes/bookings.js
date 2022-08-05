@@ -4,7 +4,6 @@ const ExpressError = require('../utils/ExpressError')
 const wrapAsync     =require('../utils/wrapAsync')
 const Booking       = require('../models/booking')
 const {bookingValidationSchema} = require('../validations/schemaValidations')
-
 // validatung booking
 const validatedBooking = (req, res, next) => {
     const {error} = bookingValidationSchema.validate(req.body)
@@ -36,6 +35,7 @@ router.post('/',validatedBooking, wrapAsync(async (req,res,next) => {
     const newBooking = {title,price,location,description}
     const booking = new Booking(newBooking)
     await booking.save()
+    req.flash('success', 'Booking created Successfully!')
     res.redirect(`/bookings/${booking._id}`)
  
 }))
@@ -45,7 +45,12 @@ router.post('/',validatedBooking, wrapAsync(async (req,res,next) => {
 router.get('/:id', wrapAsync(async (req,res) => {
     const { id } = req.params
     const booking = await  Booking.findById(id).populate('reviews')
-    res.render('bookings/show', { booking })
+    if(!booking) {
+        req.flash('error','Cannot find that booking.')
+        res.redirect('/bookings')
+    } else {
+        res.render('bookings/show', { booking })
+    }
 }))
 
 // delete booking
@@ -59,7 +64,13 @@ router.delete('/:id',  async (req,res) => {
 router.get('/:id/edit',wrapAsync( async(req,res) => {
     const {id} = req.params
     const booking = await Booking.findById(id)
-    res.render('bookings/edit', {booking})
+    if(!booking) {
+        req.flash('error','Cannot find that booking.')
+        res.redirect('/bookings')
+    } else {
+
+        res.render('bookings/edit', {booking})
+    }
 })
 
 )
@@ -67,6 +78,7 @@ router.get('/:id/edit',wrapAsync( async(req,res) => {
 router.put('/:id', validatedBooking,  async (req, res) => {
     const {id} = req.params
     const updateBooking = await Booking.findByIdAndUpdate(id, req.body, {runValidators:true})
+    req.flash('success', 'Booking updated Successfully!')
     res.redirect(`/bookings/${updateBooking._id}`)
 })
 

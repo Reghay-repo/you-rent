@@ -26,6 +26,7 @@ router.post('/',validateReview, wrapAsync(async(req,res) => {
     booking.reviews.push(review);
     await booking.save();
     await review.save();
+    req.flash('success', 'Review created successfully!')
     return res.redirect(`/bookings/${booking._id}`);
 }));
 
