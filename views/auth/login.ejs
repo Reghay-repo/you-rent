@@ -10,34 +10,36 @@
 
           <h2 class="mb-5 text-black">Log In</h2>
 
-          <form action="#" class="p-5 bg-white">
+          <form action="/login" method="POST" class="p-5 bg-white validated-form"  novalidate>
            
             <div class="row form-group">
               
-              <div class="col-md-12">
-                <label class="text-black" for="email">Email</label> 
-                <input type="email" id="email" class="form-control">
+              <div class="mb-3 col-md-12">
+                <label  class="form-label text-black" for="username">Username</label>
+                <input class="form-control" type="text" placeholder="username" name="username" id="username" required>
+                   <div class="valid-feedback">
+                    Looks good!
+                  </div>
               </div>
-            </div>
 
-            <div class="row form-group">
-              
-              <div class="col-md-12">
-                <label class="text-black" for="subject">Password</label> 
-                <input type="password" id="subject" class="form-control">
+              <div class="mb-3 col-md-12">
+                <label  class="form-label text-black" for="password">Password</label>
+                <input class="form-control" type="password" placeholder="password" name="password" id="password" required>
+                   <div class="valid-feedback">
+                    Looks good!
+                  </div>
               </div>
-            </div>
 
             <div class="row form-group">
               <div class="col-12">
-                <p>No account yet? <a href="register.html">Register</a></p>
+                <p>No account yet? <a href="/register">Register</a></p>
               </div>
             </div>
 
           
-            <div class="row form-group">
+            <div class="row form-group mt-3">
               <div class="col-md-12">
-                <input type="submit" value="Sign In" class="btn btn-primary py-2 px-4 text-white">
+                <button class="btn btn-primary text-white">Sign In</button>
               </div>
             </div>
 
@@ -48,3 +50,27 @@
       </div>
     </div>
   </div>
+
+
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+    'use strict'
+    
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.validated-form')
+    
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+    
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+    </script>

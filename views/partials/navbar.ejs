@@ -15,10 +15,15 @@
             <li><a href="/bookings/create">Create booking</a></li>
             <li><a href="/about">About us </a></li>
        
+            <% if (!currentUser) { %>
+              <li class="ml-xl-3 login"><a href="/login"><span class="border-left pl-xl-4"></span>Log In</a></li>
+              <li><a href="/register" class="cta"><span class="bg-primary text-white rounded">Register</span></a></li>
+            <% } else  { %>
+ 
+              <li><a href="/logout" class="cta"><span class="bg-info text-white rounded">Logout</span></a></li>
+              <% }   %>
+   
 
-            <li class="ml-xl-3 login"><a href="/login"><span class="border-left pl-xl-4"></span>Log In</a></li>
-
-            <li><a href="/register" class="cta"><span class="bg-primary text-white rounded">Register</span></a></li>
           </ul>
         </nav>
       </div>

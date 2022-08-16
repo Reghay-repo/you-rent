@@ -12,6 +12,7 @@ async function main() {
 }
 
 
+
 const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const randomPrice = () => Math.floor(Math.random() * 500) 
@@ -24,6 +25,7 @@ const seedDB = async () => {
     {
         const randomnum = Math.floor(Math.random() * 1300)
         const booking = new Booking({
+            author:'62f7da0821b4b559b4a0685b',
             location: `${cities[randomnum].country}, ${cities[randomnum].name}`,
             title: `${sample(places)} ${sample(descriptors)}`,
             price : randomPrice(),
@@ -39,3 +41,38 @@ const seedDB = async () => {
 seedDB().then(() => {
     mongoose.connection.close()
 })   
+
+
+
+
+
+
+
+
+// [1 item
+//     0:{23 items
+//     "addressLine1":"5500 Grand Lake Dr"
+//     "city":"San Antonio"
+//     "state":"TX"
+//     "zipCode":"78244"
+//     "formattedAddress":"5500 Grand Lake Dr, San Antonio, TX 78244"
+//     "assessorID":"05076-103-0500"
+//     "bedrooms":3
+//     "county":"Bexar"
+//     "legalDescription":"CB 5076A BLK 3 LOT 50"
+//     "squareFootage":1878
+//     "subdivision":"CONV A/S CODE"
+//     "yearBuilt":1973
+//     "bathrooms":2
+//     "lotSize":8843
+//     "propertyType":"Single Family"
+//     "lastSaleDate":"2017-10-19T00:00:00.000Z"
+//     "features":{...}14 items
+//     "taxAssessment":{...}4 items
+//     "propertyTaxes":{...}2 items
+//     "owner":{...}2 items
+//     "id":"5500-Grand-Lake-Dr,-San-Antonio,-TX-78244"
+//     "longitude":-98.351442
+//     "latitude":29.475962
+//     }
+//     ]
