@@ -83,7 +83,6 @@ app.use('/bookings/:id/reviews', reviewsRoutes);
 app.use('/', userRoutes)
 // route to home
 app.get('/', (req,res) => {
-
     res.render('home')
 })
 
