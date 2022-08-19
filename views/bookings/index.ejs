@@ -13,7 +13,13 @@
           <% for(let booking of bookings ){ %>
               <div class="col-lg-6">
                 <div class="d-block d-md-flex listing vertical">
-                  <a href="#" class="img d-block" style="background-image: url('<%= booking.image %>')"></a>
+                  <% if (booking.images.length >1) { %>
+                    <a href="#" class="img d-block" style="background-image: url('<%= booking.images[0].url %>')"></a>
+                    
+                    <% }else { %>
+                      <a href="#" class="img d-block" style="background-image: url('/images/no-image.png')"></a>
+
+                    <% } %> 
                   <div class="lh-content">
                     <span class="category">Cars &amp; Vehicles</span>
                     <a href="#" class="bookmark"><span class="icon-heart"></span></a>

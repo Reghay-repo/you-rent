@@ -6,6 +6,10 @@ const Booking       = require('../models/booking')
 const BookingController         = require('../controllers/BookingController')
 const {bookingValidationSchema} = require('../validations/schemaValidations')
 const {isLoggedIn,isAuthor, validatedBooking}  =require('../middleware')
+const multer  = require('multer')
+const {storage}  = require('../cloudinary')
+
+const upload = multer({ storage })
 
 // router.get('/', wrapAsync(BookingController.index));
 // router.post('/',validatedBooking, wrapAsync(BookingController.store));
@@ -13,7 +17,8 @@ const {isLoggedIn,isAuthor, validatedBooking}  =require('../middleware')
 
 router.route('/')
 .get(wrapAsync(BookingController.index))
-.post(validatedBooking, wrapAsync(BookingController.store));
+.post(isLoggedIn,upload.array('image'),validatedBooking, wrapAsync(BookingController.store));
+
 
 router.get('/create', isLoggedIn, BookingController.create);
 router.get('/:id/edit',  isLoggedIn,isAuthor, wrapAsync(BookingController.edit))
@@ -21,7 +26,7 @@ router.get('/:id/edit',  isLoggedIn,isAuthor, wrapAsync(BookingController.edit))
 router.route('/:id')
     .get(wrapAsync(BookingController.show))
     .delete(isAuthor, wrapAsync(BookingController.delete))
-    .put( validatedBooking, isAuthor, wrapAsync(BookingController.update))
+    .put(upload.array('image'), validatedBooking, isAuthor, wrapAsync(BookingController.update))
 
 
 

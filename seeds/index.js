@@ -21,7 +21,7 @@ const randomPrice = () => Math.floor(Math.random() * 500)
 const seedDB = async () => {
     await Booking.deleteMany({})
 
-    for(let i= 0; i <=  300; i++ ) 
+    for(let i= 0; i <=  20; i++ ) 
     {
         const randomnum = Math.floor(Math.random() * 1300)
         const booking = new Booking({
@@ -29,7 +29,16 @@ const seedDB = async () => {
             location: `${cities[randomnum].country}, ${cities[randomnum].name}`,
             title: `${sample(places)} ${sample(descriptors)}`,
             price : randomPrice(),
-            image: 'https://source.unsplash.com/1600x900/?interiors',
+            images: [
+                {
+                    url: 'https://res.cloudinary.com/dejfsqbcs/image/upload/v1660753644/YouRent/mrkweetmnf0chd8nvl2l.jpg',
+                    filename: 'YouRent/mrkweetmnf0chd8nvl2l',
+                  },
+                  {
+                    url: 'https://res.cloudinary.com/dejfsqbcs/image/upload/v1660753644/YouRent/wss6habpq8qa9snpquuw.jpg',
+                    filename: 'YouRent/wss6habpq8qa9snpquuw',
+                  },
+            ],
             description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, earum voluptas aliquid magni qui impedit quasi, labore magnam expedita odit, corrupti voluptate ipsam quidem quas error illum explicabo velit accusamus.'
         })
         await booking.save()

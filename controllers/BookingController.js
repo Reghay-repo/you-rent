@@ -1,5 +1,5 @@
 const Booking       = require('../models/booking')
-
+const {cloudinary}  = require('../cloudinary')
 // index
 module.exports.index = async (req,res) =>  {
     const bookings = await Booking.find({}).limit(30)
@@ -16,8 +16,10 @@ module.exports.store = async (req,res,next) => {
     const { title,price,description,location} = req.body;
     const newBooking = {title,price,location,description};
     const booking = new Booking(newBooking);
+    booking.images = req.files.map(file => ({url:file.path, filename: file.filename}))
     booking.author = req.user._id;
     await booking.save();
+    console.log(booking);
     req.flash('success', 'Booking created Successfully!');
     res.redirect(`/bookings/${booking._id}`);
 }
@@ -33,7 +35,6 @@ module.exports.show = async (req,res) => {
         }
     })
     .populate('author');
-    console.log(booking);
     if(!booking) {
         req.flash('error','Cannot find that booking.')
         res.redirect('/bookings')
@@ -67,7 +68,24 @@ module.exports.update = async (req, res) => {
     const {id} = req.params;
     //find the booking by id 
     const booking =  await Booking.findById(id);
-
+    const imgs = req.files.map(file => ({url:file.path, filename: file.filename}));
+    booking.images.push(...imgs);
+    if(req.body.deleteImages) {
+        for(let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
+        await booking.updateOne({
+            $pull : {
+                images: {
+                    filename: {
+                        $in: req.body.deleteImages,
+                    }
+                }
+            }
+        })
+        console.log(booking);
+    }
+    await booking.save();
     const updateBooking = await Booking.findByIdAndUpdate(id, req.body, {runValidators:true})
     req.flash('success', 'Booking updated Successfully!')
     res.redirect(`/bookings/${updateBooking._id}`)

@@ -3,12 +3,23 @@ const { Schema }    = mongoose
 const Review        = require('./review')
 
 // createing schema for a booking
+
+
+
+const imageSchema = new Schema ({
+        url:String,
+        filename:String,
+})
+
+imageSchema.virtual('thumbnail').get(function(){
+    return this.url.replace('/upload', '/upload/w_200')
+})
 const bookingSchema = Schema({
     title: String,
     description: String,
     price:Number,
     location:String,
-    image:String,
+    images:[imageSchema],
     author: {
         type:Schema.Types.ObjectId,
         ref:'User',
