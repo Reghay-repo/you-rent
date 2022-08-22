@@ -3,7 +3,10 @@
 
 
 
-  <div class="site-blocks-cover inner-page-cover overlay img-fluid" style="background-image: url('<%=  booking.images.length >1 ? booking.images[0].url : `/images/no-image.png`   %>');" data-aos="fade" data-stellar-background-ratio="0.5">
+
+
+
+  <div class="site-blocks-cover inner-page-cover overlay img-fluid" style="background-image: url('<%=  booking.images.length >= 1 ? booking.images[0].url : `/images/no-image.png`   %>');" data-aos="fade" data-stellar-background-ratio="0.5">
     <div class="container">
       <div class="row align-items-center justify-content-center text-center">
 
@@ -30,7 +33,7 @@
         <div class="col-lg-8">
           
           <div class="mb-4" >
-          <% if (booking.images.length > 1) { %>
+          <% if (booking.images.length >= 1) { %>
             <div class="slide-one-item home-slider owl-carousel">
               <% for( let image of booking.images ) { %>
                 <div><img src="<%= image.url %> " alt="Image"  style="height:500px" class="img-fluid rounded"></div>
@@ -57,6 +60,11 @@
         <div class="col-lg-3 ml-auto">
 
           <div class="mb-5">
+            <h3 class="h6 mb-3">Map Location : </h3>
+            <div id='map' style='width: 600px; height: 300px;'></div>
+          </div>  
+          <div class="mb-5">
+            
             <h3 class="h5 text-black my-3">Filters</h3>
             <form action="#" method="post">
               <div class="form-group">
@@ -134,10 +142,7 @@
             </form>
           </div>
 
-          <div class="mb-5">
-            <h3 class="h6 mb-3">More Info</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti voluptatem placeat facilis, reprehenderit eius officiis.</p>
-          </div>
+          
 
         </div>
 
@@ -240,3 +245,10 @@
     })()
     </script>
 
+
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN %>';
+  const booking  =  <%- JSON.stringify(booking) %>;
+</script>
+
+<script src="/js/showMap.js"></script>

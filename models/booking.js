@@ -4,6 +4,7 @@ const Review        = require('./review')
 
 // createing schema for a booking
 
+const opts = { toJSON : { virtuals: true } } 
 
 
 const imageSchema = new Schema ({
@@ -17,6 +18,17 @@ imageSchema.virtual('thumbnail').get(function(){
 const bookingSchema = Schema({
     title: String,
     description: String,
+    geometry: {
+        type: {
+            type:String,
+            enum:['Point'],
+            required:true,
+        },
+        coordinates: {
+            type:[Number],
+            required:true,
+        }
+    },
     price:Number,
     location:String,
     images:[imageSchema],
@@ -30,8 +42,13 @@ const bookingSchema = Schema({
             ref: 'Review'
         }
     ]
-})
+},opts);
 
+
+bookingSchema.virtual("properties.popUpMarkup").get(function() {
+    return `<strong><a href="/bookings/${this._id}">${this.title}</a></strong>
+            <p>${this.description.substring(0,20)}...</p>`;
+})
 
 bookingSchema.post('findOneAndDelete', async (doc) => {
     if(doc) {

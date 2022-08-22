@@ -16,8 +16,8 @@ const upload = multer({ storage })
 
 
 router.route('/')
-.get(wrapAsync(BookingController.index))
-.post(isLoggedIn,upload.array('image'),validatedBooking, wrapAsync(BookingController.store));
+    .get(wrapAsync(BookingController.index))
+    .post(isLoggedIn,upload.array('image'),validatedBooking, wrapAsync(BookingController.store));
 
 
 router.get('/create', isLoggedIn, BookingController.create);

@@ -1,8 +1,14 @@
 const Booking       = require('../models/booking')
 const {cloudinary}  = require('../cloudinary')
+const mbxGeocoding  = require('@mapbox/mapbox-sdk/services/geocoding')
+const mabBoxToken   = process.env.MAPBOX_TOKEN
+const geoCoder      =  mbxGeocoding( {accessToken: mabBoxToken });
+
+
 // index
 module.exports.index = async (req,res) =>  {
-    const bookings = await Booking.find({}).limit(30)
+    const bookings = await Booking.find({})
+    // const bookings = await Booking.find({}).limit(30)
     res.render('bookings/index', { bookings })      
 }
 
@@ -13,9 +19,14 @@ module.exports.create = (req,res) => {
 
 // store
 module.exports.store = async (req,res,next) => {
+   const geoData = await geoCoder.forwardGeocode({
+        query: req.body.location,
+        limit:1,
+    }).send();
     const { title,price,description,location} = req.body;
     const newBooking = {title,price,location,description};
     const booking = new Booking(newBooking);
+    booking.geometry = geoData.body.features[0].geometry;
     booking.images = req.files.map(file => ({url:file.path, filename: file.filename}))
     booking.author = req.user._id;
     await booking.save();

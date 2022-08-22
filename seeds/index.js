@@ -21,13 +21,17 @@ const randomPrice = () => Math.floor(Math.random() * 500)
 const seedDB = async () => {
     await Booking.deleteMany({})
 
-    for(let i= 0; i <=  20; i++ ) 
+    for(let i= 0; i <=  200; i++ ) 
     {
         const randomnum = Math.floor(Math.random() * 1300)
         const booking = new Booking({
             author:'62f7da0821b4b559b4a0685b',
             location: `${cities[randomnum].country}, ${cities[randomnum].name}`,
             title: `${sample(places)} ${sample(descriptors)}`,
+            geometry: { type: 'Point', coordinates: [
+                cities[randomnum].lng,
+                cities[randomnum].lat,
+            ] },
             price : randomPrice(),
             images: [
                 {
