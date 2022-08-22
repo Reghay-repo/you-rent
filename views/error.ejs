@@ -37,7 +37,9 @@
                 <div class="message-box">
                     <h1 class="m-b-0"><%= status  %> </h1>
                     <h2><%= err.message %></h2>
-                    <p><%= err.stack %></p>
+                    <% if (process.env.NODE_ENV !== "production") { %>
+                        <p><%= err.stack %></p>
+                    <% } %>
                     <div class="buttons-con">
                         <div class="action-link-wrap">
                             <a href="/" class="btn btn-custom btn-info waves-effect waves-light m-t-20">Go to Home Page</a>
