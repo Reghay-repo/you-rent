@@ -31,6 +31,7 @@ const session        = require('express-session');
 const User           = require('./models/user')
 const passport       = require('passport');
 const LocalStrategy  = require('passport-local')
+const mongoSanitize = require('express-mongo-sanitize');
 // set ejs as view engine
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -57,6 +58,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+app.use(mongoSanitize());
 
 // save flash messages to locals
 app.use((req, res, next) => {
