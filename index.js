@@ -26,6 +26,7 @@ const cookieParser   = require('cookie-parser');
 const userRoutes     = require('./routes/users')
 const bookingsRoutes = require('./routes/bookings')
 const reviewsRoutes  = require('./routes/reviews');
+const helmet        = require('helmet');
 
 const session        = require('express-session');
 const User           = require('./models/user')
@@ -61,6 +62,24 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 app.use(mongoSanitize());
+
+// helmet security options
+
+// app.use(helmet.contentSecurityPolicy());
+// app.use(helmet.crossOriginEmbedderPolicy());
+// app.use(helmet.crossOriginOpenerPolicy());
+app.use(helmet.crossOriginResourcePolicy());
+app.use(helmet.dnsPrefetchControl());
+app.use(helmet.expectCt());
+app.use(helmet.frameguard());
+app.use(helmet.hidePoweredBy());
+app.use(helmet.hsts());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noSniff());
+app.use(helmet.originAgentCluster());
+app.use(helmet.permittedCrossDomainPolicies());
+app.use(helmet.referrerPolicy());
+app.use(helmet.xssFilter());
 
 // save flash messages to locals
 app.use((req, res, next) => {
